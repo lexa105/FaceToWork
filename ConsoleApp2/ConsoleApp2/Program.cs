@@ -34,7 +34,7 @@ namespace ConsoleApp2
 			const string RECOGNITION_MODEL = RecognitionModel.Recognition04;
 
 			// Large Face List - Je seznam jakychkoliv obliceju seznam je ulozen na serveru dokud nebude smazan FaceList - Delete
-			const string 
+			const string KOURIM CURAKY
 		}
 	}
 }
