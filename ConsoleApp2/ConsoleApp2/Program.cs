@@ -20,8 +20,8 @@ namespace ConsoleApp2
 		//Konstatni "string" pro "Image URL"
 		const string IMAGE_BASE_URL = "https://raw.githubusercontent.com/lexa105/Azure-Cup-FaceToWork/main/obrazky/";
 
-		const string SUBSCRIPTION_KEY = "1bb9e797051348698dc5c58a509646c8";
-		const string ENDPOINT = "https://facetowork-endpoint.cognitiveservices.azure.com/";
+		const string SUBSCRIPTION_KEY = "<subscription key>";
+		const string ENDPOINT = "<endpoint>";
 
 
 		static void Main(string[] args)
