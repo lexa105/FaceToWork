@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,8 +20,8 @@ namespace ConsoleApp2
 		//Konstatni "string" pro "Image URL"
 		const string IMAGE_BASE_URL = "https://raw.githubusercontent.com/lexa105/Azure-Cup-FaceToWork/main/obrazky/";
 
-		const string SUBSCRIPTION_KEY = "<subscription key>";
-		const string ENDPOINT = "<endpoint>";
+		const string SUBSCRIPTION_KEY = "1bb9e797051348698dc5c58a509646c8";
+		const string ENDPOINT = "https://facetowork-endpoint.cognitiveservices.azure.com/";
 
 
 		static void Main(string[] args)
@@ -30,7 +30,8 @@ namespace ConsoleApp2
 
 			// rozpoznavaci modely neboli RECOGNITION MODELY jsou modely na rozpoznavani tvari pomoci Azure.
 			// Celkove jich je 4. Kazdy vysel v jinej rok. Obecne je lepsi pouzivat nejnovejsi RECOGNITION MODEL.
-			// RECOGNITION je pro pouziti pri POROVNANI nebo IDENTIFIKACI nikoliv pro DETEKCI
+			// RECOGNITION je pro pouziti pri POROVNANI nebo IDENTIFIKACI nikoliv pro DETEKCI obliceju
+			
 			
 			// Recognition model 4 je nejlepsi protoze dokaze rozeznat registrovane tvare pres masky.
 			const string RECOGNITION_MODEL = RecognitionModel.Recognition04;
@@ -60,21 +61,34 @@ namespace ConsoleApp2
 			Console.WriteLine("=========DETEKUJI OBLICEJE=========");
 			Console.WriteLine();
 
-			List<string> imageFileNames = new List<string>
+			List<string> imageFileNames = new List<string>			//Vytvori List<> jmenem imageFileNames
 			{
 				"JBGrande.jpg", // Justin Bieber a Ariana Grande
-				"elon-musk.jpg"
+				"elon-musk.jpeg"// The God Elon Musk
 			};
 
-			foreach (var imageFileName in imageFileNames)
+			foreach (var imageFileName in imageFileNames)   // pro kazdy 'imageFileName' se udela dalsi list Detected Face
 			{
 				IList<DetectedFace> detectedFaces;
 
-				detectedFaces = await client.Face.DetectWithUrlAsync($"{url}{imageFileName}", true, false, returnFaceAttributes: new List<FaceAttributeType?> { FaceAttributeType.Age,
-					FaceAttributeType.Gender }, recognitionModel: recognitionModel, detectionModel: DetectionModel.Detection01) ;
+				detectedFaces = await client.Face.DetectWithUrlAsync($"{url}{imageFileName}", true, false, returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.Age,
+					FaceAttributeType.Gender }, recognitionModel: recognitionModel, detectionModel: DetectionModel.Detection01);
+
+				Console.WriteLine();
+				Console.WriteLine($"{detectedFaces.Count} faces detected from image {imageFileName}.");
+				Console.WriteLine();
+
+				foreach (var detectedFace in detectedFaces)
+				{
+					
+					Console.WriteLine($"Rectangles(Left/Top/Width/Height) : {detectedFace.FaceRectangle.Left} {detectedFace.FaceRectangle.Top} {detectedFace.FaceRectangle.Width} {detectedFace.FaceRectangle.Height}" +
+						$"	ID: {detectedFace.FaceId}");
+				};
 			};
 
-			foreach (var faceAttribute in detecte)
+			
+			
+			
 		}
 	}
 }
