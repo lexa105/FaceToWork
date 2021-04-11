@@ -82,7 +82,7 @@ namespace ConsoleApp2
 				{
 					
 					Console.WriteLine($"Rectangles(Left/Top/Width/Height) : {detectedFace.FaceRectangle.Left} {detectedFace.FaceRectangle.Top} {detectedFace.FaceRectangle.Width} {detectedFace.FaceRectangle.Height}" +
-						$"	ID: {detectedFace.FaceId}");
+						$"	ID: {detectedFace.FaceId}		Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
 				};
 			};
 
