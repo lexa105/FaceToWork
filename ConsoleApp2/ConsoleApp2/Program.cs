@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,8 +20,8 @@ namespace ConsoleApp2
 		//Konstatni "string" pro "Image URL"
 		const string IMAGE_BASE_URL = "https://raw.githubusercontent.com/lexa105/Azure-Cup-FaceToWork/main/obrazky/";
 
-		const string SUBSCRIPTION_KEY = "<subscription key>";
-		const string ENDPOINT = "<endpoint>";
+		const string SUBSCRIPTION_KEY = "1bb9e797051348698dc5c58a509646c8";
+		const string ENDPOINT = "https://facetowork-endpoint.cognitiveservices.azure.com/";
 
 
 		static void Main(string[] args)
@@ -47,7 +47,7 @@ namespace ConsoleApp2
 			// Authentikace uzivatele.
 			IFaceClient faceClient = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
 
-			DetectFaceExtract(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
+			DetectFaceRecognize(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
 
 		}
 
@@ -71,7 +71,7 @@ namespace ConsoleApp2
 			{
 				IList<DetectedFace> detectedFaces;
 
-				detectedFaces = await client.Face.DetectWithUrlAsync($"{url}{imageFileName}", true, false, returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.Age,
+				detectedFaces = await client.Face.DetectWithUrlAsync  ($"{url}{imageFileName}", true, false, returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.Age,
 					FaceAttributeType.Gender }, recognitionModel: recognitionModel, detectionModel: DetectionModel.Detection01);
 
 				Console.WriteLine();
@@ -82,13 +82,26 @@ namespace ConsoleApp2
 				{
 					
 					Console.WriteLine($"Rectangles(Left/Top/Width/Height) : {detectedFace.FaceRectangle.Left} {detectedFace.FaceRectangle.Top} {detectedFace.FaceRectangle.Width} {detectedFace.FaceRectangle.Height}" +
-						$"	ID: {detectedFace.FaceId}		Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
+						$"	ID: {detectedFace.FaceId}       Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
 				};
-			};
 
+				Console.WriteLine();
+			};
 			
+		}
+
+		private static async Task<List<DetectedFace>> DetectFaceRecognize(IFaceClient faceClient, string url, string recognition_model)
+		{
+			IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithUrlAsync(url, recognitionModel: recognition_model, detectionModel: DetectionModel.Detection03);
+			Console.WriteLine($"{detectedFaces.Count} faces found in {Path.GetFileName(url)}");
+			return detectedFaces.ToList();
 			
-			
+		}
+
+		public static async Task FindSimilar(IFaceClient faceClient, string url, string recognition_model)
+		{
+			Console.WriteLine("=====Find Similar Faces=====");
+			Console.WriteLine();
 		}
 	}
 }
