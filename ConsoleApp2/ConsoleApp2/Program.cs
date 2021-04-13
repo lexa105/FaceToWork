@@ -20,8 +20,8 @@ namespace ConsoleApp2
 		//Konstatni "string" pro "Image URL"
 		const string IMAGE_BASE_URL = "https://raw.githubusercontent.com/lexa105/Azure-Cup-FaceToWork/main/obrazky/";
 
-		const string SUBSCRIPTION_KEY = "<subs key>";
-		const string ENDPOINT = "<endpoint>";
+		const string SUBSCRIPTION_KEY = "1bb9e797051348698dc5c58a509646c8";
+		const string ENDPOINT = "https://facetowork-endpoint.cognitiveservices.azure.com/";
 
 
 		static void Main(string[] args)
@@ -30,8 +30,7 @@ namespace ConsoleApp2
 
 			// rozpoznavaci modely neboli RECOGNITION MODELY jsou modely na rozpoznavani tvari pomoci Azure.
 			// Celkove jich je 4. Kazdy vysel v jinej rok. Obecne je lepsi pouzivat nejnovejsi RECOGNITION MODEL.
-			// RECOGNITION je pro pouziti pri POROVNANI nebo IDENTIFIKACI nikoliv pro DETEKCI obliceju
-			
+			// RECOGNITION je pro pouziti pri POROVNANI nebo IDENTIFIKACI nikoliv pro DETEKCI
 			
 			// Recognition model 4 je nejlepsi protoze dokaze rozeznat registrovane tvare pres masky.
 			const string RECOGNITION_MODEL = RecognitionModel.Recognition04;
@@ -47,8 +46,14 @@ namespace ConsoleApp2
 			// Authentikace uzivatele.
 			IFaceClient faceClient = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
 
-			DetectFaceRecognize(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
-
+			try
+			{
+				FindSimilar(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
+			}
+			catch (APIErrorException e)
+			{
+				Console.WriteLine(e.Message);
+			}
 		}
 
 		public static IFaceClient Authenticate(string endpoint, string key)
@@ -61,17 +66,17 @@ namespace ConsoleApp2
 			Console.WriteLine("=========DETEKUJI OBLICEJE=========");
 			Console.WriteLine();
 
-			List<string> imageFileNames = new List<string>			//Vytvori List<> jmenem imageFileNames
+			List<string> imageFileNames = new List<string>
 			{
 				"JBGrande.jpg", // Justin Bieber a Ariana Grande
-				"elon-musk.jpeg"// The God Elon Musk
+				"elon-musk.jpeg"
 			};
 
 			foreach (var imageFileName in imageFileNames)   // pro kazdy 'imageFileName' se udela dalsi list Detected Face
 			{
 				IList<DetectedFace> detectedFaces;
 
-				detectedFaces = await client.Face.DetectWithUrlAsync  ($"{url}{imageFileName}", true, false, returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.Age,
+				detectedFaces = await client.Face.DetectWithUrlAsync($"{url}{imageFileName}", true, false, returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.Age,
 					FaceAttributeType.Gender }, recognitionModel: recognitionModel, detectionModel: DetectionModel.Detection01);
 
 				Console.WriteLine();
@@ -80,14 +85,13 @@ namespace ConsoleApp2
 
 				foreach (var detectedFace in detectedFaces)
 				{
-					
-					Console.WriteLine($"Rectangles(Left/Top/Width/Height) : {detectedFace.FaceRectangle.Left} {detectedFace.FaceRectangle.Top} {detectedFace.FaceRectangle.Width} {detectedFace.FaceRectangle.Height}" +
-						$"	ID: {detectedFace.FaceId}       Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
-				};
 
+					Console.WriteLine($"Rectangles(Left/Top/Width/Height) : {detectedFace.FaceRectangle.Left} {detectedFace.FaceRectangle.Top} {detectedFace.FaceRectangle.Width} {detectedFace.FaceRectangle.Height}" +
+						$"	ID: {detectedFace.FaceId}		Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
+				}
 				Console.WriteLine();
-			};
-			
+			}
+
 		}
 
 		private static async Task<List<DetectedFace>> DetectFaceRecognize(IFaceClient faceClient, string url, string recognition_model)
@@ -95,13 +99,54 @@ namespace ConsoleApp2
 			IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithUrlAsync(url, recognitionModel: recognition_model, detectionModel: DetectionModel.Detection03);
 			Console.WriteLine($"{detectedFaces.Count} faces found in {Path.GetFileName(url)}");
 			return detectedFaces.ToList();
-			
+
+
 		}
 
 		public static async Task FindSimilar(IFaceClient faceClient, string url, string recognition_model)
 		{
 			Console.WriteLine("=====Find Similar Faces=====");
 			Console.WriteLine();
+
+
+			List<string> TargetImageFileNames = new List<string>
+			{
+							"JBGrande.jpg",
+							"elon1.jpg",
+							"elon2.jpg",
+							"elon3.jpg",
+							"billgates.jpg",
+							"poki.jpg",
+							"rock.jpg"
+			};
+
+			string sourceImage = "elon-musk.jpeg";
+			IList<Guid?> targetFaceIds = new List<Guid?>();
+
+			foreach (var TargetFileName in TargetImageFileNames)
+			{
+				//detekuje vsechny tvare z target obrazku
+				var faces = await DetectFaceRecognize(faceClient, $"{url}{TargetFileName}", recognition_model);
+				//prida ID detekovanych obliceju do listu, ktery jsme nahore vytvorili "targetFaceIds"
+				targetFaceIds.Add(faces[0].FaceId.Value);
+			}
+			// Detect faces from source image url.
+			IList<DetectedFace> detectedFaces = await DetectFaceRecognize(faceClient, $"{url}{sourceImage}", recognition_model);
+			
+			
+
+			// Find a similar face(s) in the list of IDs. Comapring only the first in list for testing purposes.
+			IList<SimilarFace> similarResults = await faceClient.Face.FindSimilarAsync(detectedFaces[0].FaceId.Value, null, null, targetFaceIds);
+
+			
+			// </snippet_find_similar>
+			// <snippet_find_similar_print>
+			foreach (var similarResult in similarResults)
+			{
+				Console.WriteLine($"Faces from {sourceImage} & ID:{similarResult.FaceId} are similar with confidence: {similarResult.Confidence}.");
+
+			}
+			
 		}
 	}
 }
