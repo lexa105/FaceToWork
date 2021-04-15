@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Globalization;
 
 using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
@@ -31,7 +32,7 @@ namespace ConsoleApp2
 			// rozpoznavaci modely neboli RECOGNITION MODELY jsou modely na rozpoznavani tvari pomoci Azure.
 			// Celkove jich je 4. Kazdy vysel v jinej rok. Obecne je lepsi pouzivat nejnovejsi RECOGNITION MODEL.
 			// RECOGNITION je pro pouziti pri POROVNANI nebo IDENTIFIKACI nikoliv pro DETEKCI
-			
+
 			// Recognition model 4 je nejlepsi protoze dokaze rozeznat registrovane tvare pres masky.
 			const string RECOGNITION_MODEL = RecognitionModel.Recognition04;
 
@@ -40,13 +41,17 @@ namespace ConsoleApp2
 			const string LargeFaceList = "MyLargeFaceListName";
 
 
+
+			
+			
+
 			//Prikazy ktere se pouziji
 
 
 			// Authentikace uzivatele.
 			IFaceClient faceClient = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
 
-			try
+			/*try
 			{
 				FindSimilar(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
 			}
@@ -54,6 +59,8 @@ namespace ConsoleApp2
 			{
 				Console.WriteLine(e.Message);
 			}
+			*/
+			DetectFaceExtract(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
 		}
 
 		public static IFaceClient Authenticate(string endpoint, string key)
@@ -63,6 +70,9 @@ namespace ConsoleApp2
 
 		public static async Task DetectFaceExtract(IFaceClient client, string url, string recognitionModel)
 		{
+
+			
+
 			Console.WriteLine("=========DETEKUJI OBLICEJE=========");
 			Console.WriteLine();
 
@@ -85,11 +95,19 @@ namespace ConsoleApp2
 
 				foreach (var detectedFace in detectedFaces)
 				{
+					//casove udaje
+					var date = DateTime.Now.ToLocalTime();
 
 					Console.WriteLine($"Rectangles(Left/Top/Width/Height) : {detectedFace.FaceRectangle.Left} {detectedFace.FaceRectangle.Top} {detectedFace.FaceRectangle.Width} {detectedFace.FaceRectangle.Height}" +
-						$"	ID: {detectedFace.FaceId}		Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
+						$"	ID: {detectedFace.FaceId}	Age: {detectedFace.FaceAttributes.Age}   Gender: {detectedFace.FaceAttributes.Gender}");
+
+					Thread.Sleep(5000);
+					Console.WriteLine($"We have detected faces at the time");
+
+					Console.WriteLine(date);
+					
 				}
-				Console.WriteLine();
+				
 			}
 
 		}
@@ -143,10 +161,28 @@ namespace ConsoleApp2
 			// <snippet_find_similar_print>
 			foreach (var similarResult in similarResults)
 			{
-				Console.WriteLine($"Faces from {sourceImage} & ID:{similarResult.FaceId} are similar with confidence: {similarResult.Confidence}.");
-
+				Console.WriteLine($"Faces from {sourceImage} & ID:{similarResult.FaceId} {similarResult.PersistedFaceId} are similar with confidence: {similarResult.Confidence}.");
 			}
 			
+		}
+
+		private static async Task Verify(IFaceClient client, string url, string recognition_model)
+		{
+			Console.WriteLine("======VERIFY======");
+			Console.WriteLine();
+
+			List<string> targetImageFiles = new List<string> { "elon2.jpg", "rock.jpg", "billgates.jpg" };
+			string sourceImage1 = "elon-musk.jpeg";
+			string sourceImage2 = "poki.jpg";
+
+			List<Guid> targetFaceIds = new List<Guid>();
+
+			foreach (var targetImageFile in targetImageFiles)
+			{
+				IList<DetectedFace> detectedFaces = await DetectFaceRecognize(client, $"{url}{targetImageFile}", recognition_model);
+				targetFaceIds.Add(detectedFaces[0].FaceId.Value);
+				Console.WriteLine($"{detectedFaces.Count} faces found in the image {targetImageFile}");
+			}
 		}
 	}
 }
