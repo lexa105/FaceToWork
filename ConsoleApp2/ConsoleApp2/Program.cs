@@ -42,8 +42,8 @@ namespace ConsoleApp2
 
 
 
-			
-			
+
+
 
 			//Prikazy ktere se pouziji
 
@@ -59,8 +59,11 @@ namespace ConsoleApp2
 			{
 				Console.WriteLine(e.Message);
 			}
-			*/
+			
 			DetectFaceExtract(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
+
+			*/
+			Verify(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
 		}
 
 		public static IFaceClient Authenticate(string endpoint, string key)
@@ -71,7 +74,7 @@ namespace ConsoleApp2
 		public static async Task DetectFaceExtract(IFaceClient client, string url, string recognitionModel)
 		{
 
-			
+
 
 			Console.WriteLine("=========DETEKUJI OBLICEJE=========");
 			Console.WriteLine();
@@ -105,9 +108,9 @@ namespace ConsoleApp2
 					Console.WriteLine($"We have detected faces at the time");
 
 					Console.WriteLine(date);
-					
+
 				}
-				
+
 			}
 
 		}
@@ -150,20 +153,20 @@ namespace ConsoleApp2
 			}
 			// Detect faces from source image url.
 			IList<DetectedFace> detectedFaces = await DetectFaceRecognize(faceClient, $"{url}{sourceImage}", recognition_model);
-			
-			
+
+
 
 			// Find a similar face(s) in the list of IDs. Comapring only the first in list for testing purposes.
 			IList<SimilarFace> similarResults = await faceClient.Face.FindSimilarAsync(detectedFaces[0].FaceId.Value, null, null, targetFaceIds);
 
-			
+
 			// </snippet_find_similar>
 			// <snippet_find_similar_print>
 			foreach (var similarResult in similarResults)
 			{
 				Console.WriteLine($"Faces from {sourceImage} & ID:{similarResult.FaceId} {similarResult.PersistedFaceId} are similar with confidence: {similarResult.Confidence}.");
 			}
-			
+
 		}
 
 		private static async Task Verify(IFaceClient client, string url, string recognition_model)
@@ -171,7 +174,7 @@ namespace ConsoleApp2
 			Console.WriteLine("======VERIFY======");
 			Console.WriteLine();
 
-			List<string> targetImageFiles = new List<string> { "elon2.jpg", "rock.jpg", "billgates.jpg" };
+			List<string> targetImageFiles = new List<string> { "elon2.jpg", "rock.jpg"};
 			string sourceImage1 = "elon-musk.jpeg";
 			string sourceImage2 = "poki.jpg";
 
@@ -183,6 +186,36 @@ namespace ConsoleApp2
 				targetFaceIds.Add(detectedFaces[0].FaceId.Value);
 				Console.WriteLine($"{detectedFaces.Count} faces found in the image {targetImageFile}");
 			}
+
+			//detekce Tvari v Source Imagi 1
+			List<DetectedFace> detectedFaces1 = await DetectFaceRecognize(client, $"{url}{sourceImage1}", recognition_model);
+			Console.WriteLine($"{detectedFaces1.Count} faces detected in {sourceImage1}.");
+			Guid sourceFaceId1 = detectedFaces1[0].FaceId.Value;
+
+			//detekce Tvari v Source Imagi 2
+			List<DetectedFace> detectedFaces2 = await DetectFaceRecognize(client, $"{url}{sourceImage2}", recognition_model);
+			Console.WriteLine($"{detectedFaces2.Count} faces detected in {sourceImage2}.");
+			Guid sourceFaceId2 = detectedFaces2[0].FaceId.Value;
+
+			// Verification example for faces of the same person.
+			VerifyResult verifyResult1 = await client.Face.VerifyFaceToFaceAsync(sourceFaceId1, targetFaceIds[0]);
+			Console.WriteLine(
+				verifyResult1.IsIdentical
+					? $"Faces from {sourceImage1} & {targetImageFiles[0]} are of the same (Positive) person, similarity confidence: {verifyResult1.Confidence}."
+					: $"Faces from {sourceImage1} & {targetImageFiles[0]} are of different (Negative) persons, similarity confidence: {verifyResult1.Confidence}.");
+
+
+			// Verification example for faces of different persons.
+			VerifyResult verifyResult2 = await client.Face.VerifyFaceToFaceAsync(sourceFaceId2, targetFaceIds[0]);
+			Console.WriteLine(
+				verifyResult2.IsIdentical
+					? $"Faces from {sourceImage2} & {targetImageFiles[0]} are of the same (Negative) person, similarity confidence: {verifyResult2.Confidence}."
+					: $"Faces from {sourceImage2} & {targetImageFiles[0]} are of different (Positive) persons, similarity confidence: {verifyResult2.Confidence}.");
+
+			Console.WriteLine();
 		}
+		// konec VERIFIKACE
+
+
 	}
 }
