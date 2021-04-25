@@ -14,8 +14,7 @@ namespace ConsoleApp2
 
 	class Program
 	{
-		// pouzito pro Identifikovani 
-		static string personGroupId = Guid.NewGuid().ToString();
+		
 
 
 		//Konstatni "string" pro "Image URL"
@@ -41,7 +40,7 @@ namespace ConsoleApp2
 			const string LargeFaceList = "MyLargeFaceListName";
 
 
-
+			IFaceClient faceClient = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
 
 
 
@@ -49,21 +48,25 @@ namespace ConsoleApp2
 
 
 			// Authentikace uzivatele.
-			IFaceClient faceClient = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
 
-			/*try
-			{
-				FindSimilar(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
-			}
-			catch (APIErrorException e)
-			{
-				Console.WriteLine(e.Message);
-			}
+
+			// Prikazy pro pouziti odkazu. Ktere jsou dole vypsane. 
+
+			/*
+			FindSimilar(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
 			
-			DetectFaceExtract(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
-
-			*/
 			Verify(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
+
+			DetectFaceExtract(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
+			*/
+
+			//IdentifyInPersonGroup(faceClient, IMAGE_BASE_URL, RECOGNITION_MODEL).Wait();
+			
+			
+			DeletePersonGroup(faceClient, personGroupId).Wait();
+			
+			
+
 		}
 
 		public static IFaceClient Authenticate(string endpoint, string key)
@@ -120,9 +123,8 @@ namespace ConsoleApp2
 			IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithUrlAsync(url, recognitionModel: recognition_model, detectionModel: DetectionModel.Detection03);
 			Console.WriteLine($"{detectedFaces.Count} faces found in {Path.GetFileName(url)}");
 			return detectedFaces.ToList();
-
-
 		}
+		// funkce pro roy
 
 		public static async Task FindSimilar(IFaceClient faceClient, string url, string recognition_model)
 		{
@@ -209,7 +211,7 @@ namespace ConsoleApp2
 			VerifyResult verifyResult2 = await client.Face.VerifyFaceToFaceAsync(sourceFaceId2, targetFaceIds[0]);
 			Console.WriteLine(
 				verifyResult2.IsIdentical
-					? $"Faces from {sourceImage2} & {targetImageFiles[0]} are of the same (Negative) person, similarity confidence: {verifyResult2.Confidence}."
+					? $"Faces from {sourceImage2} & {targetImageFiles[0]} are of the same (Negative) person, similarity confidence: {verifyResult2.Confidence}." 
 					: $"Faces from {sourceImage2} & {targetImageFiles[0]} are of different (Positive) persons, similarity confidence: {verifyResult2.Confidence}.");
 
 			Console.WriteLine();
@@ -217,5 +219,100 @@ namespace ConsoleApp2
 		// konec VERIFIKACE
 
 
+		     
+
+		// Identifikace + vytvoreni Person Group
+
+		/*	-Pro identifikace je zapotrebi aby se vytvoril person group 
+			- Identifikace pouziva faceId z listu Detected Face a Person Group a vytiskne možný kandidáty pro objekty
+			
+
+		*/
+		// pouzito pro Identifikovani 
+		static string personGroupId = "15f9de63-7a94-4fda-ba87-88a227a23e0f";
+
+		public static async Task IdentifyInPersonGroup(IFaceClient client, string url, string recognitionModel)
+		{
+
+			Console.WriteLine("=======IDENTIFY FACES==========");
+			Console.WriteLine();
+
+			Dictionary<string, string[]> personDictionary = new Dictionary<string, string[]>
+			{
+				{ "Elon Musk", new[] { "elon1.jpg", "elon2.jpg" } },
+				{ "Rock", new[] { "rock-og.jpg", "rock.jpg"} },
+			};
+
+			string sourceImageFileName = "billgates.jpg";
+
+			// vytvareni a Person Group
+			Console.WriteLine($"Create a person group ({personGroupId}).");
+			await client.PersonGroup.CreateAsync(personGroupId, name: "PersonGroup1", recognitionModel: recognitionModel);
+
+			foreach (var groupedFaces in personDictionary.Keys)
+			{
+				await Task.Delay(250);
+				Person person = await client.PersonGroupPerson.CreateAsync(personGroupId: personGroupId, name: groupedFaces);
+				Console.WriteLine($"Create a person group person {groupedFaces}");
+
+				// prida obliceje
+				foreach (var similarImage in personDictionary[groupedFaces])
+				{
+					Console.WriteLine($"Add face to the person group person ({groupedFaces}) from image {similarImage}");
+					PersistedFace face = await client.PersonGroupPerson.AddFaceFromUrlAsync(personGroupId, person.PersonId, $"{url}{similarImage}", similarImage);
+				}
+
+			}
+
+			// Trenovani person group
+			Console.WriteLine();
+			Console.WriteLine($"Train person group {personGroupId}");
+			await client.PersonGroup.TrainAsync(personGroupId);
+
+			// pockani dokud nebude hotovy trenovani
+			while (true)
+			{
+				await Task.Delay(1000);
+				var trainingStatus = await client.PersonGroup.GetTrainingStatusAsync(personGroupId);
+				Console.WriteLine($"Training status: {trainingStatus.Status}.");
+
+				if (trainingStatus.Status == TrainingStatusType.Succeeded)
+				{
+					break;
+				}
+				Console.WriteLine();
+			}
+
+			List<Guid> sourceFaceIds = new List<Guid>();
+			//Detekovani obliceje kodem
+			List<DetectedFace> detectedFaces = await DetectFaceRecognize(client,$"{url}{sourceImageFileName}", recognitionModel);
+
+			// pridani detekovanych obliceju --> detectedFaces.Id -----> sourceFaceIds !!musi byt .FaceId.Value aby to bylo v GUID
+
+			foreach (var detectedFace in detectedFaces)
+			{
+				sourceFaceIds.Add(detectedFace.FaceId.Value);
+			}
+
+			var identifyResults = await client.Face.IdentifyAsync(sourceFaceIds, personGroupId);
+
+			foreach (var identifyResult in identifyResults)
+			{
+				Person person = await client.PersonGroupPerson.GetAsync(personGroupId, identifyResult.Candidates[0].PersonId);
+				Console.WriteLine($"Person {person.Name} is identified for face in: {sourceImageFileName} - {identifyResult.FaceId} " +
+					$"confidence: {identifyResult.Candidates[0].Confidence}");
+			}
+			Console.WriteLine();
+		}
+
+
+
+		//**Mazani Person Group, pro test ucely**
+
+		public static async Task DeletePersonGroup(IFaceClient client, string personGroupId)
+		{
+			await client.PersonGroup.DeleteAsync(personGroupId);
+			Console.WriteLine($"Deleted the person group {personGroupId}");
+		}
 	}
 }
