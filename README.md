@@ -1,4 +1,4 @@
-# AzureCup 2021 FaceToWork
+# AzureCup 2021 - FaceToWork
 
 Oficiální GitHub Azure FaceToWork projektu
 
