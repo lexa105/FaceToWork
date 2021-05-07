@@ -37,7 +37,7 @@ namespace FaceToWork_.NET_Framework_
 {
     public partial class Form1 : Form
     {
-        static readonly CascadeClassifier cascadeClassifier = new CascadeClassifier(@"C:\Users\Windows 10\source\repos\FaceToWork(.NET Framework)\FaceToWork(.NET Framework)\facefrontal_data.xml");
+        static readonly CascadeClassifier oclface = new CascadeClassifier(@"C:\Users\Windows 10\source\repos\FaceToWork(.NET Framework)\FaceToWork(.NET Framework)\facefrontal_data.xml");
 
         //dragging variables
         bool draggable;
@@ -48,9 +48,12 @@ namespace FaceToWork_.NET_Framework_
         FilterInfoCollection filter;
         VideoCaptureDevice device;
         internal Image<Gray, Byte> GrayFrame;
+        internal Image<Bgr, Byte> videoframe;
         ResizeBilinear filter_cubic = new ResizeBilinear(640, 360);
-
         bool oblicejdetekovan;
+        byte[] jpegparams;
+        MemoryStream memory = new MemoryStream();
+
         
 
 
@@ -61,7 +64,7 @@ namespace FaceToWork_.NET_Framework_
         private readonly IFaceClient faceClient = new FaceClient(
             new ApiKeyServiceClientCredentials(subscriptionKey),
             new System.Net.Http.DelegatingHandler[] { });
-
+        
 
 
 
@@ -109,13 +112,33 @@ namespace FaceToWork_.NET_Framework_
         {
             var oldimage = pictureBox1.Image;
             Bitmap video = (Bitmap)eventArgs.Frame.Clone();
+            videoframe = new Image<Bgr, byte>(video);
+            GrayFrame = new Image<Gray, byte>(video);
+
+           
+
+            Rectangle orig_area;
+            /*
+                        if (GrayFrame != null)
+                        {
+                            Rectangle[] faces = null;
+                            faces = oclface.DetectMultiScale(GrayFrame, 1.2, 1);
+                            if ((faces.Length == -1) || (faces == null)) return;
+
+
+                            foreach (Rectangle face in faces)
+                            {
+                                using (Graphics graphics = Graphics.FromImage(video))
+                                {
+                                    using (Pen pen = new Pen(Color.Red, 1))
+                                    {
+                                        graphics.DrawRectangle(pen, face);
+                                    }
+                                }
+                            }
+                        }
+            */
             Bitmap newImage = filter_cubic.Apply(video);
-            GrayFrame = new Image<Gray, byte>(newImage);
-
-
-            
-
-
 
             pictureBox1.Image = newImage;
 
@@ -126,28 +149,32 @@ namespace FaceToWork_.NET_Framework_
 
             GC.Collect();
         }
+
         /*
-                private async Task<IList<DetectedFace>> UploadNdetect(string imageFilePath)
+        private async Task<IList<DetectedFace>> UploadNdetect( imageFilePath)
+        {
+            try
+            {
                 {
-                    try
-                    {
-                        using (Stream imageFileStream = File)
-                        {
-                            IList<DtectedFace> faceList = await faceClient.Face.DetectWithStreamAsync()
-                        }
-                    }
+                    IList<DetectedFace> faceList = await faceClient.Face.DetectWithStreamAsync(imageFilePath, true, false, null, recognitionModel: RecognitionModel.Recognition04);
+                    return faceList.ToList();
                 }
+            }
+			catch (Exception e)
+			{
+                MessageBox.Show(e.Message);
+			}
         */
 
-        private void StopCamera_Click(object sender, EventArgs e)
-        {
-            device.Stop();
 
-            
-        }
+
 
         #region User Interface = UI
         //======================
+        private void StopCamera_Click(object sender, EventArgs e)
+        {
+            device.Stop();
+        }
 
         private void domu_btn_Click(object sender, EventArgs e)
         {
@@ -213,20 +240,36 @@ namespace FaceToWork_.NET_Framework_
             }
         }
 
-      /*  private Bitmap MakeBMP(byte[] data)
+        /*  private Bitmap MakeBMP(byte[] data)
+          {
+              TypeConverter tc = TypeDescriptor.GetConverter(typeof(Bitmap));
+              return (Bitmap)tc.ConvertFrom(byteArray);
+          }
+        */
+        
+        public static Stream ToStream()
+        {
+            
+            jpegparams = videoframe.ToJpegData(60);
+            MyImage.Save(m1, System.Drawing.Imaging.ImageFormat.Jpeg);
+            byte[] header = new byte[] { 255, 216 };
+            header = m1.ToArray();
+            return (header);
+            
+        }
+
+		private void QnA_btn_Click(object sender, EventArgs e)
 		{
-            TypeConverter tc = TypeDescriptor.GetConverter(typeof(Bitmap));
-            return (Bitmap)tc.ConvertFrom(byteArray);
-		}
-      */
-        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+            jpegparams = videoframe.ToJpegData(60);
+            Stream m1 = new MemoryStream(jpegparams);
+
+
+            
+        }
+
+        public static UploadAndDetect()
 		{
-            using (var ms = new MemoryStream())
-			{
-                imageIn.Save(ms, imageIn.RawFormat);
-                return ms.ToArray();
-			}
-		}
-		
+            var faces = await faceClient.Face.DetectWithStreamAsync(m1, true,);
+        }
 	}
 }
