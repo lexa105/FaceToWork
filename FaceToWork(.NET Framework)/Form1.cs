@@ -60,12 +60,14 @@ namespace FaceToWork_.NET_Framework_
         //variables for Azure Face API
         private static string subscriptionKey = "1bb9e797051348698dc5c58a509646c8";
         private static string endpoint = "https://facetowork-endpoint.cognitiveservices.azure.com";
-
-        private readonly IFaceClient faceClient = new FaceClient(
+        
+        public static IFaceClient faceClient = new FaceClient(
             new ApiKeyServiceClientCredentials(subscriptionKey),
             new System.Net.Http.DelegatingHandler[] { });
-        
 
+        private IList<DetectedFace> faceList;
+
+        const string Recognition_model = RecognitionModel.Recognition04;
 
 
         public Form1()
@@ -73,12 +75,13 @@ namespace FaceToWork_.NET_Framework_
             faceClient.Endpoint = endpoint;
             
             InitializeComponent();
-
+            
             
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             oblicejdetekovan = false;
+            dochazkaControl1.Hide();
             ListVideoDevices();
 
         }
@@ -171,21 +174,31 @@ namespace FaceToWork_.NET_Framework_
 
         #region User Interface = UI
         //======================
+
+
+        //zastaví kameru
         private void StopCamera_Click(object sender, EventArgs e)
         {
             device.Stop();
         }
 
+
         private void domu_btn_Click(object sender, EventArgs e)
         {
             SidePanel_blue.Height = domu_btn.Height;
             SidePanel_blue.Top = domu_btn.Top;
+
+            dochazkaControl1.Hide();
         }
 
         private void dochazka_btn_Click(object sender, EventArgs e)
         {
+            //design modry panel
             SidePanel_blue.Height = dochazka_btn.Height;
             SidePanel_blue.Top = dochazka_btn.Top;
+
+            btnExit.BringToFront();
+            dochazkaControl1.Show();
         }
 
         private void nastaveni_btn_Click(object sender, EventArgs e)
@@ -240,13 +253,9 @@ namespace FaceToWork_.NET_Framework_
             }
         }
 
-        /*  private Bitmap MakeBMP(byte[] data)
-          {
-              TypeConverter tc = TypeDescriptor.GetConverter(typeof(Bitmap));
-              return (Bitmap)tc.ConvertFrom(byteArray);
-          }
-        */
         
+
+        /*
         public static Stream ToStream()
         {
             
@@ -258,18 +267,39 @@ namespace FaceToWork_.NET_Framework_
             
         }
 
+        */
+
 		private void QnA_btn_Click(object sender, EventArgs e)
+		{
+
+        }
+
+        //Upload na Azure Face API pomocí stream z kamery
+        private static async Task<List<DetectedFace>> UploadAndDetect(Stream stream)
+		{
+            try
+            {
+                IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithStreamAsync(stream, false, false, recognitionModel: Recognition_model);
+                Console.WriteLine($"There are {detectedFaces.Count} faces in the camera");
+                return detectedFaces.ToList();
+            }
+            catch (APIErrorException f) //pokud najde API chybu nahlasi
+			{
+                MessageBox.Show(f.Message);
+                return new List<DetectedFace>();
+			}
+        }
+
+		private async void btnProcess_Click(object sender, EventArgs e)
 		{
             jpegparams = videoframe.ToJpegData(60);
             Stream m1 = new MemoryStream(jpegparams);
-
-
+            List<DetectedFace> detectedFaces = await UploadAndDetect(m1);
             
-        }
+            foreach (var faces in detectedFaces)
+			{
 
-        public static UploadAndDetect()
-		{
-            var faces = await faceClient.Face.DetectWithStreamAsync(m1, true,);
-        }
+			}
+		}
 	}
 }

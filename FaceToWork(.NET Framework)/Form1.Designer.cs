@@ -30,7 +30,7 @@ namespace FaceToWork_.NET_Framework_
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.optionPanel = new System.Windows.Forms.Panel();
 			this.QnA_btn = new System.Windows.Forms.Button();
 			this.domu_btn = new System.Windows.Forms.Button();
 			this.dochazka_btn = new System.Windows.Forms.Button();
@@ -38,30 +38,41 @@ namespace FaceToWork_.NET_Framework_
 			this.SidePanel_blue = new System.Windows.Forms.Panel();
 			this.logoBox = new System.Windows.Forms.PictureBox();
 			this.panelTop = new System.Windows.Forms.Panel();
-			this.exit_btn = new System.Windows.Forms.Button();
+			this.btnExit = new System.Windows.Forms.Button();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.cboCameraDevices = new System.Windows.Forms.ComboBox();
 			this.OnCamera = new System.Windows.Forms.Button();
 			this.StopCamera = new System.Windows.Forms.Button();
-			this.panel1.SuspendLayout();
+			this.btnProcess = new System.Windows.Forms.Button();
+			this.btnTrain = new System.Windows.Forms.Button();
+			this.btnIdentify = new System.Windows.Forms.Button();
+			this.txtGroupName = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.txtNewUser = new System.Windows.Forms.TextBox();
+			this.listUsers = new System.Windows.Forms.ListBox();
+			this.btnAddUser = new System.Windows.Forms.Button();
+			this.btnCreateGroup = new System.Windows.Forms.Button();
+			this.dochazkaControl1 = new FaceToWork_.NET_Framework_.DochazkaControl();
+			this.optionPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// panel1
+			// optionPanel
 			// 
-			this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.panel1.Controls.Add(this.QnA_btn);
-			this.panel1.Controls.Add(this.domu_btn);
-			this.panel1.Controls.Add(this.dochazka_btn);
-			this.panel1.Controls.Add(this.nastaveni_btn);
-			this.panel1.Controls.Add(this.SidePanel_blue);
-			this.panel1.Controls.Add(this.logoBox);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(226, 716);
-			this.panel1.TabIndex = 0;
+			this.optionPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.optionPanel.Controls.Add(this.QnA_btn);
+			this.optionPanel.Controls.Add(this.domu_btn);
+			this.optionPanel.Controls.Add(this.dochazka_btn);
+			this.optionPanel.Controls.Add(this.nastaveni_btn);
+			this.optionPanel.Controls.Add(this.SidePanel_blue);
+			this.optionPanel.Controls.Add(this.logoBox);
+			this.optionPanel.Dock = System.Windows.Forms.DockStyle.Left;
+			this.optionPanel.Location = new System.Drawing.Point(0, 0);
+			this.optionPanel.Name = "optionPanel";
+			this.optionPanel.Size = new System.Drawing.Size(226, 716);
+			this.optionPanel.TabIndex = 0;
 			// 
 			// QnA_btn
 			// 
@@ -77,6 +88,7 @@ namespace FaceToWork_.NET_Framework_
 			this.QnA_btn.Size = new System.Drawing.Size(36, 35);
 			this.QnA_btn.TabIndex = 1;
 			this.QnA_btn.UseVisualStyleBackColor = true;
+			this.QnA_btn.Click += new System.EventHandler(this.QnA_btn_Click);
 			// 
 			// domu_btn
 			// 
@@ -164,21 +176,21 @@ namespace FaceToWork_.NET_Framework_
 			this.panelTop.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseMove);
 			this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
 			// 
-			// exit_btn
+			// btnExit
 			// 
-			this.exit_btn.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-			this.exit_btn.FlatAppearance.BorderSize = 0;
-			this.exit_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.exit_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-			this.exit_btn.ForeColor = System.Drawing.Color.White;
-			this.exit_btn.Image = ((System.Drawing.Image)(resources.GetObject("exit_btn.Image")));
-			this.exit_btn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.exit_btn.Location = new System.Drawing.Point(1303, 21);
-			this.exit_btn.Name = "exit_btn";
-			this.exit_btn.Size = new System.Drawing.Size(38, 35);
-			this.exit_btn.TabIndex = 1;
-			this.exit_btn.UseVisualStyleBackColor = true;
-			this.exit_btn.Click += new System.EventHandler(this.exit_btn_Click);
+			this.btnExit.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+			this.btnExit.FlatAppearance.BorderSize = 0;
+			this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnExit.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+			this.btnExit.ForeColor = System.Drawing.Color.White;
+			this.btnExit.Image = ((System.Drawing.Image)(resources.GetObject("btnExit.Image")));
+			this.btnExit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.btnExit.Location = new System.Drawing.Point(1312, 21);
+			this.btnExit.Name = "btnExit";
+			this.btnExit.Size = new System.Drawing.Size(38, 35);
+			this.btnExit.TabIndex = 1;
+			this.btnExit.UseVisualStyleBackColor = true;
+			this.btnExit.Click += new System.EventHandler(this.exit_btn_Click);
 			// 
 			// pictureBox1
 			// 
@@ -218,46 +230,166 @@ namespace FaceToWork_.NET_Framework_
 			this.StopCamera.UseVisualStyleBackColor = true;
 			this.StopCamera.Click += new System.EventHandler(this.StopCamera_Click);
 			// 
+			// btnProcess
+			// 
+			this.btnProcess.Location = new System.Drawing.Point(846, 607);
+			this.btnProcess.Name = "btnProcess";
+			this.btnProcess.Size = new System.Drawing.Size(132, 35);
+			this.btnProcess.TabIndex = 6;
+			this.btnProcess.Text = "Process";
+			this.btnProcess.UseVisualStyleBackColor = true;
+			this.btnProcess.Click += new System.EventHandler(this.btnProcess_Click);
+			// 
+			// btnTrain
+			// 
+			this.btnTrain.Location = new System.Drawing.Point(984, 607);
+			this.btnTrain.Name = "btnTrain";
+			this.btnTrain.Size = new System.Drawing.Size(132, 35);
+			this.btnTrain.TabIndex = 6;
+			this.btnTrain.Text = "Train";
+			this.btnTrain.UseVisualStyleBackColor = true;
+			// 
+			// btnIdentify
+			// 
+			this.btnIdentify.Location = new System.Drawing.Point(1122, 607);
+			this.btnIdentify.Name = "btnIdentify";
+			this.btnIdentify.Size = new System.Drawing.Size(132, 35);
+			this.btnIdentify.TabIndex = 6;
+			this.btnIdentify.Text = "Identify";
+			this.btnIdentify.UseVisualStyleBackColor = true;
+			// 
+			// txtGroupName
+			// 
+			this.txtGroupName.Location = new System.Drawing.Point(987, 77);
+			this.txtGroupName.Name = "txtGroupName";
+			this.txtGroupName.Size = new System.Drawing.Size(188, 20);
+			this.txtGroupName.TabIndex = 7;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.label1.Location = new System.Drawing.Point(899, 81);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(82, 16);
+			this.label1.TabIndex = 8;
+			this.label1.Text = "Group name";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.label2.Location = new System.Drawing.Point(899, 112);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(67, 16);
+			this.label2.TabIndex = 8;
+			this.label2.Text = "New User";
+			// 
+			// txtNewUser
+			// 
+			this.txtNewUser.Location = new System.Drawing.Point(987, 108);
+			this.txtNewUser.Name = "txtNewUser";
+			this.txtNewUser.Size = new System.Drawing.Size(157, 20);
+			this.txtNewUser.TabIndex = 7;
+			// 
+			// listUsers
+			// 
+			this.listUsers.FormattingEnabled = true;
+			this.listUsers.Location = new System.Drawing.Point(902, 131);
+			this.listUsers.Name = "listUsers";
+			this.listUsers.Size = new System.Drawing.Size(276, 290);
+			this.listUsers.TabIndex = 9;
+			// 
+			// btnAddUser
+			// 
+			this.btnAddUser.Location = new System.Drawing.Point(1150, 107);
+			this.btnAddUser.Name = "btnAddUser";
+			this.btnAddUser.Size = new System.Drawing.Size(25, 20);
+			this.btnAddUser.TabIndex = 6;
+			this.btnAddUser.Text = "+";
+			this.btnAddUser.UseVisualStyleBackColor = true;
+			// 
+			// btnCreateGroup
+			// 
+			this.btnCreateGroup.Location = new System.Drawing.Point(902, 427);
+			this.btnCreateGroup.Name = "btnCreateGroup";
+			this.btnCreateGroup.Size = new System.Drawing.Size(276, 35);
+			this.btnCreateGroup.TabIndex = 6;
+			this.btnCreateGroup.Text = "CreateGroup";
+			this.btnCreateGroup.UseVisualStyleBackColor = true;
+			this.btnCreateGroup.Click += new System.EventHandler(this.btnProcess_Click);
+			// 
+			// dochazkaControl1
+			// 
+			this.dochazkaControl1.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.dochazkaControl1.Location = new System.Drawing.Point(226, 33);
+			this.dochazkaControl1.Name = "dochazkaControl1";
+			this.dochazkaControl1.Size = new System.Drawing.Size(1136, 683);
+			this.dochazkaControl1.TabIndex = 10;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.ClientSize = new System.Drawing.Size(1362, 716);
-			this.Controls.Add(this.exit_btn);
+			this.Controls.Add(this.dochazkaControl1);
+			this.Controls.Add(this.listUsers);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.txtNewUser);
+			this.Controls.Add(this.txtGroupName);
+			this.Controls.Add(this.btnAddUser);
+			this.Controls.Add(this.btnIdentify);
+			this.Controls.Add(this.btnTrain);
+			this.Controls.Add(this.btnCreateGroup);
+			this.Controls.Add(this.btnProcess);
+			this.Controls.Add(this.btnExit);
 			this.Controls.Add(this.StopCamera);
 			this.Controls.Add(this.OnCamera);
 			this.Controls.Add(this.cboCameraDevices);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.panelTop);
-			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.optionPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.Load += new System.EventHandler(this.Form1_Load);
-			this.panel1.ResumeLayout(false);
+			this.optionPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.logoBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel optionPanel;
 		private System.Windows.Forms.PictureBox logoBox;
 		private System.Windows.Forms.Panel panelTop;
 		private System.Windows.Forms.Button domu_btn;
 		private System.Windows.Forms.Button nastaveni_btn;
 		private System.Windows.Forms.Button dochazka_btn;
 		private System.Windows.Forms.Panel SidePanel_blue;
-		private System.Windows.Forms.Button exit_btn;
+		private System.Windows.Forms.Button btnExit;
 		private System.Windows.Forms.Button QnA_btn;
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.ComboBox cboCameraDevices;
 		private System.Windows.Forms.Button OnCamera;
 		private System.Windows.Forms.Button StopCamera;
+		private System.Windows.Forms.Button btnProcess;
+		private System.Windows.Forms.Button btnTrain;
+		private System.Windows.Forms.Button btnIdentify;
+		private System.Windows.Forms.TextBox txtGroupName;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.TextBox txtNewUser;
+		private System.Windows.Forms.ListBox listUsers;
+		private System.Windows.Forms.Button btnAddUser;
+		private System.Windows.Forms.Button btnCreateGroup;
+		private DochazkaControl dochazkaControl1;
 	}
 }
 
