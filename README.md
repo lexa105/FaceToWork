@@ -1,12 +1,17 @@
 # AzureCup 2021 - FaceToWork
 
-Oficiální GitHub Azure FaceToWork projektu
+Oficiální GitHub FaceToWork projektu, na účast soutěže AzureCup 2021
 
-Read Me složka pro instruktáž k použití aplikace FaceToWork od týmu GFPlegendy.
-
-
+Instruktáž k použití aplikace FaceToWork od týmu GFPlegendy.
 
 
+# Packages
+Projekt využívá balíčky 
+
+* **Emgu.Cv**
+* **AForge** + další odvětví (.Imaging, .Video, .VideoDirectShow)
+* **Microsoft.Azure.CognitiveServices.Vision.Face**
+* **Newtonsoft.Json**
 
 
 
