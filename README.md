@@ -14,7 +14,7 @@ Projekt využívá balíčky
 * **Newtonsoft.Json**
 
 
-
+Projekt běží na .NET Frameworku 4.8
 
 
 
