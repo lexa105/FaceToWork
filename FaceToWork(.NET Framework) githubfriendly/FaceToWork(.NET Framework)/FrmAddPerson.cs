@@ -52,9 +52,8 @@ namespace FaceToWork
 		private async void AcceptBtn_Click(object sender, EventArgs e)
 		{
 			var faceClient = FaceToWork.Form1.faceClient;
-			var _nameId = nameId_txtBox.Text.ToLower().Replace(" ", "");
-			string _groupId = "lidi"; 
-
+			
+			
 			try
 			{
 				Person person = await faceClient.PersonGroupPerson.CreateAsync(_groupId, Name_txtBox.Text.ToString());

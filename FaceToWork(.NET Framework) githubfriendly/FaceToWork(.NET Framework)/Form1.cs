@@ -79,13 +79,13 @@ namespace FaceToWork
 
         public IList<DetectedFace> faceList;
 
-        string _groupId = "lidi";
+        
 
         const string Recognition_model = RecognitionModel.Recognition04;
 
 
         //variables for database SQL
-        
+            
 
 
 
@@ -118,8 +118,6 @@ namespace FaceToWork
 
             device = new VideoCaptureDevice();
             device2 = new VideoCaptureDevice();
-            
-            
         }
 
         private void OnCamera_Click(object sender, EventArgs e)
@@ -135,8 +133,8 @@ namespace FaceToWork
             {
                 device2 = new VideoCaptureDevice(filter[cboCameraDevices2.SelectedIndex].MonikerString);
 
-                //device2.NewFrame += Device_NewFrame2;
-                //device2.Start();
+                device2.NewFrame += Device_NewFrame2;
+                device2.Start();
             }
             else device2.Stop();
         }
@@ -149,7 +147,10 @@ namespace FaceToWork
             GrayFrame = new Image<Gray, byte>(video);
 
             Rectangle[] rectangles = oclface.DetectMultiScale(GrayFrame, 1.2, 10);
-
+            if (rectangles != null)
+			{
+             
+            }
             foreach (Rectangle rectangle in rectangles)
             {
                 using (Graphics graphics = Graphics.FromImage(video)) //ziska graphics z bitmap 
@@ -158,12 +159,12 @@ namespace FaceToWork
                     {
                         graphics.DrawRectangle(pen, rectangle);
                         oblicejdetekovan = true;
-                        //Console.WriteLine("OBLIČEJ DETEKOVÁN");
+                        
                     }
                 }
             }
 
-
+            oblicejdetekovan = false;
             pictureBox1.Image = video;
 
             if (oldimage != null) //kdyz nebude predchozi frame v pictureBox1 smaze se a uvolni se Memory
@@ -350,44 +351,88 @@ namespace FaceToWork
 
 		private async void btnTrain_Click(object sender, EventArgs e)
 		{
-            try
+            List<string> groupIds = new List<string>();
+
+            groupIds.Clear();
+            DataSet1TableAdapters.PersonGroupTBLTableAdapter groupTBL = new DataSet1TableAdapters.PersonGroupTBLTableAdapter();
+            DataTable dt_person = groupTBL.GetPersonGroupID();
+
+            foreach (DataRow dr in dt_person.Rows)
+            {
+                groupIds.Add(dr["_groupId"].ToString());
+            }
+
+            foreach (string _groupId in groupIds)
+            {
+                Train(_groupId);
+            }
+        }
+
+		private async void btnIdentify_Click(object sender, EventArgs e) //Identifikace obrazku pomoci tlacitka -- tato funkce bude pouzita automaticky pomoc Oflline detekovani.
+		{
+            List<string> groupIds = new List<string>();
+
+            groupIds.Clear();
+            DataSet1TableAdapters.PersonGroupTBLTableAdapter groupTBL = new DataSet1TableAdapters.PersonGroupTBLTableAdapter();
+            DataTable dt_person = groupTBL.GetPersonGroupID();
+
+            foreach (DataRow dr in dt_person.Rows)
+            {
+                groupIds.Add(dr["_groupId"].ToString());
+            }
+
+            foreach(string _groupId in groupIds)
 			{
+                Identify(_groupId);
+			}
+
+            
+		}
+
+		private void fill_Click(object sender, EventArgs e)
+		{
+            
+        }
+
+        public async void Train(string _groupId)
+		{
+            try
+            {
                 await Task.Delay(1000);
                 await faceClient.PersonGroup.TrainAsync(_groupId);
 
-                
+
                 while (true)
-				{
+                {
                     await Task.Delay(5000);
                     var trainingStatus = await faceClient.PersonGroup.GetTrainingStatusAsync(_groupId);
 
                     if (trainingStatus.Status == TrainingStatusType.Succeeded)
-					{
+                    {
                         break;
-					}
+                    }
                     await Task.Delay(1000);
-				}
+                }
 
                 MessageBox.Show("Training successfully completed!");
-			} catch (Exception ex)
-			{
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
-			}
-		}
+            }
+        }
 
-		private async void btnIdentify_Click(object sender, EventArgs e) //Identifikace obrazku pomoci tlacitka -- tato funkce bude pouzita automaticky pomoc Oflline detekovani.
+        public async void Identify(string _groupId)
 		{
-            
-            
             try
-			{
+            {
                 if (device.IsRunning == false)// pokud kamera nema vstup - error
                 {
                     MessageBox.Show("Chybí obrazový vstup z kamery", "Camera Input");
                     return;
                 }
 
-                IList<Guid>sourceFaceIdsCamera = new List<Guid>();
+                IList<Guid> sourceFaceIdsCamera = new List<Guid>();
                 jpegparams = videoframe.ToJpegData(60);// snímá uloží jpeg data do memory 
                 Stream m1 = new MemoryStream(jpegparams);//preměna do streamu
                 IList<DetectedFace> detectedFaces = await UploadAndDetect(m1);// send stream
@@ -396,44 +441,36 @@ namespace FaceToWork
                 idList.Items.Clear();
 
                 foreach (var detectedFace in detectedFaces)
-				{
+                {
                     Console.WriteLine($"{detectedFace.FaceId.Value}");
                     Console.WriteLine("Identifying Picture");
-                    
                     sourceFaceIdsCamera.Add(detectedFace.FaceId.Value);
-                    
-				}
+                }
+
+
 
                 var identifyResults = await faceClient.Face.IdentifyAsync(sourceFaceIdsCamera, _groupId);
+
                 foreach (var identifyResult in identifyResults)
-				{
+                {
                     if (identifyResult.Candidates.Count != 0)
-					{
+                    {
                         var candidateId = identifyResult.Candidates[0].PersonId;
                         Person person = await faceClient.PersonGroupPerson.GetAsync(_groupId, candidateId);
                         idList.Items.Add($"{DateTime.Now.Date.ToString("dd.MM.yyyy")} {person.Name} přišel v {DateTime.Now.ToString("HH:mm:ss")}");
                     }
                     else
                     {
-                        foreach (var detectedFace in detectedFaces)
-						{
-                            idList.Items.Add("Unknown person");
-                        }
-                        
+                        idList.Items.Add("Unknown person");
                     }
-                    
-				}
+                }
                 MessageBox.Show("Identification successfully completed.");
-			}
-			catch (APIErrorException ex)
-			{
+            }
+            catch (APIErrorException ex)
+            {
                 MessageBox.Show(ex.Message);
-			}
-		}
-
-		private void fill_Click(object sender, EventArgs e)
-		{
-            
+            }
         }
 	}	
 }
+

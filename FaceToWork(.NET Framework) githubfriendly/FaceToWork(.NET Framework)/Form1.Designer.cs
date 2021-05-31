@@ -55,8 +55,6 @@ namespace FaceToWork
 			this.dateTxt = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.idList = new System.Windows.Forms.ListBox();
-			this.listBox1 = new System.Windows.Forms.ListBox();
-			this.fill = new System.Windows.Forms.Button();
 			this.cboCameraDevices2 = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -341,24 +339,6 @@ namespace FaceToWork
 			this.idList.Size = new System.Drawing.Size(269, 95);
 			this.idList.TabIndex = 16;
 			// 
-			// listBox1
-			// 
-			this.listBox1.FormattingEnabled = true;
-			this.listBox1.Location = new System.Drawing.Point(253, 486);
-			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(120, 95);
-			this.listBox1.TabIndex = 18;
-			// 
-			// fill
-			// 
-			this.fill.Location = new System.Drawing.Point(399, 542);
-			this.fill.Name = "fill";
-			this.fill.Size = new System.Drawing.Size(160, 39);
-			this.fill.TabIndex = 19;
-			this.fill.Text = "Fill";
-			this.fill.UseVisualStyleBackColor = true;
-			this.fill.Click += new System.EventHandler(this.fill_Click);
-			// 
 			// cboCameraDevices2
 			// 
 			this.cboCameraDevices2.FormattingEnabled = true;
@@ -420,8 +400,6 @@ namespace FaceToWork
 			this.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.ClientSize = new System.Drawing.Size(1362, 716);
 			this.Controls.Add(this.pictureBox2);
-			this.Controls.Add(this.fill);
-			this.Controls.Add(this.listBox1);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.idList);
 			this.Controls.Add(this.dateTxt);
@@ -486,8 +464,6 @@ namespace FaceToWork
 		private System.Windows.Forms.Label dateTxt;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ListBox idList;
-		private System.Windows.Forms.ListBox listBox1;
-		private System.Windows.Forms.Button fill;
 		private System.Windows.Forms.ComboBox cboCameraDevices2;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label4;

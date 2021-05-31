@@ -133,6 +133,7 @@ namespace FaceToWork
 			this.Name = "FormAddPersonGroup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "FormAddPersonGroup";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAddPersonGroup_FormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();

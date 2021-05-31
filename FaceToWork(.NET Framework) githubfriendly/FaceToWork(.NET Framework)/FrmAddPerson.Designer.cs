@@ -31,11 +31,9 @@ namespace FaceToWork
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAddPerson));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.AcceptBtn = new System.Windows.Forms.Button();
 			this.Name_txtBox = new System.Windows.Forms.TextBox();
-			this.nameId_txtBox = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.GroupNameLabel = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
@@ -54,21 +52,11 @@ namespace FaceToWork
 			this.pictureBox1.TabIndex = 0;
 			this.pictureBox1.TabStop = false;
 			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.label2.Location = new System.Drawing.Point(53, 208);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(64, 17);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "Person ID";
-			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.label1.Location = new System.Drawing.Point(53, 266);
+			this.label1.Location = new System.Drawing.Point(53, 221);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(87, 17);
 			this.label1.TabIndex = 6;
@@ -86,17 +74,10 @@ namespace FaceToWork
 			// 
 			// Name_txtBox
 			// 
-			this.Name_txtBox.Location = new System.Drawing.Point(54, 286);
+			this.Name_txtBox.Location = new System.Drawing.Point(54, 241);
 			this.Name_txtBox.Name = "Name_txtBox";
 			this.Name_txtBox.Size = new System.Drawing.Size(330, 20);
 			this.Name_txtBox.TabIndex = 2;
-			// 
-			// nameId_txtBox
-			// 
-			this.nameId_txtBox.Location = new System.Drawing.Point(54, 228);
-			this.nameId_txtBox.Name = "nameId_txtBox";
-			this.nameId_txtBox.Size = new System.Drawing.Size(330, 20);
-			this.nameId_txtBox.TabIndex = 1;
 			// 
 			// label3
 			// 
@@ -123,7 +104,7 @@ namespace FaceToWork
 			// 
 			this.label6.AutoSize = true;
 			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.label6.Location = new System.Drawing.Point(51, 357);
+			this.label6.Location = new System.Drawing.Point(51, 284);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(105, 13);
 			this.label6.TabIndex = 20;
@@ -131,7 +112,7 @@ namespace FaceToWork
 			// 
 			// btnBrowseFaceFile
 			// 
-			this.btnBrowseFaceFile.Location = new System.Drawing.Point(310, 371);
+			this.btnBrowseFaceFile.Location = new System.Drawing.Point(310, 298);
 			this.btnBrowseFaceFile.Name = "btnBrowseFaceFile";
 			this.btnBrowseFaceFile.Size = new System.Drawing.Size(34, 20);
 			this.btnBrowseFaceFile.TabIndex = 19;
@@ -142,9 +123,9 @@ namespace FaceToWork
 			// ListFolderPath
 			// 
 			this.ListFolderPath.FormattingEnabled = true;
-			this.ListFolderPath.Location = new System.Drawing.Point(54, 373);
+			this.ListFolderPath.Location = new System.Drawing.Point(54, 300);
 			this.ListFolderPath.Name = "ListFolderPath";
-			this.ListFolderPath.Size = new System.Drawing.Size(250, 95);
+			this.ListFolderPath.Size = new System.Drawing.Size(250, 173);
 			this.ListFolderPath.TabIndex = 21;
 			// 
 			// FrmAddPerson
@@ -158,10 +139,8 @@ namespace FaceToWork
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.AcceptBtn);
 			this.Controls.Add(this.Name_txtBox);
-			this.Controls.Add(this.nameId_txtBox);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.GroupNameLabel);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "FrmAddPerson";
@@ -177,11 +156,9 @@ namespace FaceToWork
 		#endregion
 
 		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button AcceptBtn;
 		private System.Windows.Forms.TextBox Name_txtBox;
-		private System.Windows.Forms.TextBox nameId_txtBox;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label GroupNameLabel;
 		private System.Windows.Forms.Label label6;
