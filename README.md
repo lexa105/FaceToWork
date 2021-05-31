@@ -35,8 +35,8 @@ Zatím lze detekce a identifikace pouze v jedné Person Group(která zatím v kl
 Na začátku si můžete nastavit Koncový bod a klíč od Azure Face API :
 ```csharp
  //variables for Azure Face API
-        private static string subscriptionKey = "1bb9e797051348698dc5c58a509646c8";
-        private static string endpoint = "https://facetowork-endpoint.cognitiveservices.azure.com";
+        private static string subscriptionKey = "<subricption key>";
+        private static string endpoint = "<endpoint>";
         
         public static IFaceClient faceClient = new FaceClient(
             new ApiKeyServiceClientCredentials(subscriptionKey),
