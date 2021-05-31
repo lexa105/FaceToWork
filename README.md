@@ -31,7 +31,7 @@ Zatím lze detekce a identifikace pouze v jedné Person Group(která zatím v kl
 
 
 
-#Použití
+# Použití
 
 Na začátku si můžete nastavit Koncový bod a klíč od Azure Face API :
 ```csharp
