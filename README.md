@@ -25,6 +25,7 @@ Demo/celá aplikace FaceToWork v0.1
 
 Detekce a identifikace obličejů zaměstnanců pomocí kognitivních služeb Azure FaceAPI. Následný zápis do docházky v podobě SQL databáze.
 Ke správnému fungování bude potřeba poslat ip adresu, abychom vás napojili do SQL serveru.
+
 Hlavní cíl programu je usnadnění záznamu zaměstnanců při příchodu do práce, kontrola proticovidových opatření (nošení respirátoru), při neidentifikování osoby zařadit do nevítaných osob.
 Zatím lze detekce a identifikace pouze v jedné Person Group(která zatím v klidu postačí).
 
