@@ -54,6 +54,12 @@ Na začátku si můžete nastavit Koncový bod a klíč od Azure Face API :
 
 5. Vraťte se zpátky **Domů**, zde si musíte vybrat dostupná zařízení pro Vchod a Východ (kamerové výstupy), dáte Zapnout Kamery, při spuštění se vám obrazovky zapnou a aplikace bude připravena identifikovat a určovat tváře.
 
+
+
+
+
+
+
 ## Licence a copyright
 
 © Tuan Pham Van, Jan Kupka, Ondřej Šponer
