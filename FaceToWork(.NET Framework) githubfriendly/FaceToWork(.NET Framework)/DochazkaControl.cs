@@ -116,5 +116,10 @@ namespace FaceToWork
 				MessageBox.Show(ex.Message);
 			}
 		}
+
+		private void CamIN_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

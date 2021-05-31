@@ -33,9 +33,6 @@ namespace FaceToWork
 			this.Dochazka = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.personIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.personNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.groupIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.personTBLBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.dataSet1 = new FaceToWork.DataSet1();
 			this.personGroupCmbBox = new System.Windows.Forms.ComboBox();
@@ -49,17 +46,22 @@ namespace FaceToWork
 			this.LoadData = new System.Windows.Forms.Button();
 			this.personTBLTableAdapter = new FaceToWork.DataSet1TableAdapters.PersonTBLTableAdapter();
 			this.TrainBtn = new System.Windows.Forms.Button();
+			this.dataGridView2 = new System.Windows.Forms.DataGridView();
+			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+			this.personNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.groupIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.personTBLBindingSource)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.personGroupTBLBindingSource)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// Dochazka
 			// 
 			this.Dochazka.AutoSize = true;
 			this.Dochazka.Font = new System.Drawing.Font("Segoe UI Semibold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.Dochazka.Location = new System.Drawing.Point(31, 11);
+			this.Dochazka.Location = new System.Drawing.Point(566, 11);
 			this.Dochazka.Name = "Dochazka";
 			this.Dochazka.Size = new System.Drawing.Size(162, 45);
 			this.Dochazka.TabIndex = 0;
@@ -80,7 +82,6 @@ namespace FaceToWork
 			this.dataGridView1.AutoGenerateColumns = false;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.personIdDataGridViewTextBoxColumn,
             this.personNameDataGridViewTextBoxColumn,
             this.groupIdDataGridViewTextBoxColumn});
 			this.dataGridView1.DataSource = this.personTBLBindingSource;
@@ -88,24 +89,6 @@ namespace FaceToWork
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.Size = new System.Drawing.Size(461, 410);
 			this.dataGridView1.TabIndex = 7;
-			// 
-			// personIdDataGridViewTextBoxColumn
-			// 
-			this.personIdDataGridViewTextBoxColumn.DataPropertyName = "_personId";
-			this.personIdDataGridViewTextBoxColumn.HeaderText = "_personId";
-			this.personIdDataGridViewTextBoxColumn.Name = "personIdDataGridViewTextBoxColumn";
-			// 
-			// personNameDataGridViewTextBoxColumn
-			// 
-			this.personNameDataGridViewTextBoxColumn.DataPropertyName = "_personName";
-			this.personNameDataGridViewTextBoxColumn.HeaderText = "_personName";
-			this.personNameDataGridViewTextBoxColumn.Name = "personNameDataGridViewTextBoxColumn";
-			// 
-			// groupIdDataGridViewTextBoxColumn
-			// 
-			this.groupIdDataGridViewTextBoxColumn.DataPropertyName = "_groupId";
-			this.groupIdDataGridViewTextBoxColumn.HeaderText = "_groupId";
-			this.groupIdDataGridViewTextBoxColumn.Name = "groupIdDataGridViewTextBoxColumn";
 			// 
 			// personTBLBindingSource
 			// 
@@ -178,6 +161,7 @@ namespace FaceToWork
 			this.CamIN.TabIndex = 10;
 			this.CamIN.Text = "Camera IN";
 			this.CamIN.UseVisualStyleBackColor = true;
+			this.CamIN.Click += new System.EventHandler(this.CamIN_Click);
 			// 
 			// button2
 			// 
@@ -213,10 +197,40 @@ namespace FaceToWork
 			this.TrainBtn.UseVisualStyleBackColor = true;
 			this.TrainBtn.Click += new System.EventHandler(this.TrainBtn_Click);
 			// 
+			// dataGridView2
+			// 
+			this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView2.Location = new System.Drawing.Point(574, 216);
+			this.dataGridView2.Name = "dataGridView2";
+			this.dataGridView2.Size = new System.Drawing.Size(508, 384);
+			this.dataGridView2.TabIndex = 11;
+			// 
+			// dateTimePicker1
+			// 
+			this.dateTimePicker1.CalendarFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateTimePicker1.Location = new System.Drawing.Point(574, 98);
+			this.dateTimePicker1.Name = "dateTimePicker1";
+			this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
+			this.dateTimePicker1.TabIndex = 12;
+			// 
+			// personNameDataGridViewTextBoxColumn
+			// 
+			this.personNameDataGridViewTextBoxColumn.DataPropertyName = "_personName";
+			this.personNameDataGridViewTextBoxColumn.HeaderText = "_personName";
+			this.personNameDataGridViewTextBoxColumn.Name = "personNameDataGridViewTextBoxColumn";
+			// 
+			// groupIdDataGridViewTextBoxColumn
+			// 
+			this.groupIdDataGridViewTextBoxColumn.DataPropertyName = "_groupId";
+			this.groupIdDataGridViewTextBoxColumn.HeaderText = "_groupId";
+			this.groupIdDataGridViewTextBoxColumn.Name = "groupIdDataGridViewTextBoxColumn";
+			// 
 			// DochazkaControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.dateTimePicker1);
+			this.Controls.Add(this.dataGridView2);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.CamIN);
 			this.Controls.Add(this.DeletePersonGroup);
@@ -235,6 +249,7 @@ namespace FaceToWork
 			((System.ComponentModel.ISupportInitialize)(this.personTBLBindingSource)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataSet1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.personGroupTBLBindingSource)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -257,9 +272,10 @@ namespace FaceToWork
 		private System.Windows.Forms.Button LoadData;
 		private System.Windows.Forms.BindingSource personTBLBindingSource;
 		private DataSet1TableAdapters.PersonTBLTableAdapter personTBLTableAdapter;
-		private System.Windows.Forms.DataGridViewTextBoxColumn personIdDataGridViewTextBoxColumn;
+		private System.Windows.Forms.Button TrainBtn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn personNameDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn groupIdDataGridViewTextBoxColumn;
-		private System.Windows.Forms.Button TrainBtn;
+		private System.Windows.Forms.DataGridView dataGridView2;
+		private System.Windows.Forms.DateTimePicker dateTimePicker1;
 	}
 }

@@ -32,38 +32,6 @@ namespace FaceToWork
 		{
 			GroupNameLabel.Text = GroupName.ToString();
 		}
-
-		private async void AcceptBtn_Click(object sender, EventArgs e)
-		{
-			var faceClient = FaceToWork.Form1.faceClient;
-			var _nameId = nameId_txtBox.Text.ToLower().Replace(" ", "");
-			
-
-			try
-			{
-				Person person = await faceClient.PersonGroupPerson.CreateAsync(_groupId, Name_txtBox.Text.ToString());
-				
-				DataSet1TableAdapters.PersonTBLTableAdapter personTBL = new DataSet1TableAdapters.PersonTBLTableAdapter();
-				personTBL.AddPerson(person.PersonId.ToString(), Name_txtBox.Text, _groupId);
-
-				foreach (string u in ListFolderPath.Items)
-				{
-					using (Stream s = File.OpenRead(u))
-					{
-						await faceClient.PersonGroupPerson.AddFaceFromStreamAsync(_groupId, person.PersonId , s);
-					}
-				}
-
-				Close();
-				MessageBox.Show("Person successfully added");
-			}
-			catch (APIErrorException ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-
-
-		}
 		private void btnBrowseFaceFile_Click(object sender, EventArgs e)
 		{
 			using (var od = new OpenFileDialog())
@@ -80,6 +48,43 @@ namespace FaceToWork
 				}
 			}
 		}
+
+		private async void AcceptBtn_Click(object sender, EventArgs e)
+		{
+			var faceClient = FaceToWork.Form1.faceClient;
+			var _nameId = nameId_txtBox.Text.ToLower().Replace(" ", "");
+			string _groupId = "lidi"; 
+
+			try
+			{
+				Person person = await faceClient.PersonGroupPerson.CreateAsync(_groupId, Name_txtBox.Text.ToString());
+
+				DataSet1TableAdapters.PersonTBLTableAdapter personTBL = new DataSet1TableAdapters.PersonTBLTableAdapter();
+				personTBL.AddPerson(person.PersonId.ToString(), Name_txtBox.Text, _groupId);
+
+				foreach (string u in ListFolderPath.Items)
+				{
+					Stream s = File.OpenRead(u);
+					
+					Console.WriteLine($"Add face to the person ({Name_txtBox.Text}).");
+					PersistedFace face = await faceClient.PersonGroupPerson.AddFaceFromStreamAsync(_groupId, person.PersonId, s);
+					await Task.Delay(100);
+
+				}
+
+				Close();
+				MessageBox.Show("Person successfully added");
+			}
+			catch (APIErrorException ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+
+
+		}
+		
+
+		
 		
 		/*private void Add_Click(object sender, EventArgs e)
 		{

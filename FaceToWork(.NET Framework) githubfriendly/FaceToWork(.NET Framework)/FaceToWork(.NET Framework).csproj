@@ -258,6 +258,9 @@
     <Content Include="facefrontal_data.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="haarcascade_frontalface_alt.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LOGOicon.ico" />
   </ItemGroup>
   <ItemGroup>

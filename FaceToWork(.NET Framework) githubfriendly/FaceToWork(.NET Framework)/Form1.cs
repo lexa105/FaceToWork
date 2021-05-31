@@ -44,6 +44,7 @@ namespace FaceToWork
 
         
         static readonly CascadeClassifier oclface = new CascadeClassifier(@"facefrontal_data.xml");
+        static readonly CascadeClassifier classifier = new CascadeClassifier(@"haarcascade_frontalface_alt.xml");
 
         //dragging variables(not so important)
         bool draggable;
@@ -53,9 +54,11 @@ namespace FaceToWork
         //variables for video = pormenne pro device 
         FilterInfoCollection filter;
         VideoCaptureDevice device;
+        VideoCaptureDevice device2;
         internal Image<Gray, Byte> GrayFrame;       
         internal Image<Bgr, Byte> videoframe;
-        ResizeBilinear filter_cubic = new ResizeBilinear(640, 360);
+        ResizeBilinear filter_cubic = new ResizeBilinear(527, 302);
+
         bool oblicejdetekovan;
         byte[] jpegparams;
         MemoryStream memory = new MemoryStream();
@@ -76,14 +79,14 @@ namespace FaceToWork
 
         public IList<DetectedFace> faceList;
 
-        public string _groupId = null;
+        string _groupId = "lidi";
 
         const string Recognition_model = RecognitionModel.Recognition04;
 
 
         //variables for database SQL
-
         
+
 
 
         public Form1()
@@ -106,9 +109,16 @@ namespace FaceToWork
         {
             filter = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (FilterInfo device in filter)
+			{
                 cboCameraDevices.Items.Add(device.Name);
+                cboCameraDevices2.Items.Add(device.Name);
+            }
             cboCameraDevices.SelectedIndex = 0;
+            
+
             device = new VideoCaptureDevice();
+            device2 = new VideoCaptureDevice();
+            
             
         }
 
@@ -116,8 +126,19 @@ namespace FaceToWork
         {
             if (device.IsRunning == true) device.Stop();
             device = new VideoCaptureDevice(filter[cboCameraDevices.SelectedIndex].MonikerString);
+            
             device.NewFrame += Device_NewFrame;
             device.Start();
+
+            if (device2.IsRunning == true) device2.Stop();
+            if (cboCameraDevices2.SelectedItem != null)
+            {
+                device2 = new VideoCaptureDevice(filter[cboCameraDevices2.SelectedIndex].MonikerString);
+
+                //device2.NewFrame += Device_NewFrame2;
+                //device2.Start();
+            }
+            else device2.Stop();
         }
 
         private void Device_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -125,11 +146,9 @@ namespace FaceToWork
             var oldimage = pictureBox1.Image;
             Bitmap video = filter_cubic.Apply((Bitmap)eventArgs.Frame.Clone());
             videoframe = new Image<Bgr, byte>(video);
-
-            
             GrayFrame = new Image<Gray, byte>(video);
 
-            Rectangle[] rectangles = oclface.DetectMultiScale(GrayFrame, 1.5, 2);
+            Rectangle[] rectangles = oclface.DetectMultiScale(GrayFrame, 1.2, 10);
 
             foreach (Rectangle rectangle in rectangles)
             {
@@ -156,16 +175,46 @@ namespace FaceToWork
 
 
 
-        //USER INTERFACE - Hlavni Nabidka
+        private void Device_NewFrame2(object sender, NewFrameEventArgs eventArgs)
+        {
+            var oldimage = pictureBox2.Image;
+            Bitmap video = filter_cubic.Apply((Bitmap)eventArgs.Frame.Clone());
+            videoframe = new Image<Bgr, byte>(video);
+            GrayFrame = new Image<Gray, byte>(video);
 
-        #region User Interface = UI
-        //======================
+            Rectangle[] rectangles2 = classifier.DetectMultiScale(GrayFrame, 1.2, 10);
+
+            foreach (Rectangle rectangle in rectangles2)
+            {
+                using (Graphics graphics = Graphics.FromImage(video)) //ziska graphics z bitmap 
+                {
+                    using (Pen pen = new Pen(Color.Red, 1))
+                    {
+                        graphics.DrawRectangle(pen, rectangle);
+                        oblicejdetekovan = true;
+                        //Console.WriteLine("OBLIČEJ DETEKOVÁN");
+                    }
+                }
+            }
+            pictureBox2.Image = video;
+            if (oldimage != null) //kdyz nebude predchozi frame v pictureBox1 smaze se a uvolni se Memory
+            {
+                oldimage.Dispose();
+            }
+            GC.Collect();
+        }
+
+            //USER INTERFACE - Hlavni Nabidka
+
+            #region User Interface = UI
+            //======================
 
 
-        //zastaví kameru
+            //zastaví kameru
         private void StopCamera_Click(object sender, EventArgs e)
         {
             device.Stop();
+            device2.Stop();
         }
 
 
@@ -238,9 +287,10 @@ namespace FaceToWork
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (device.IsRunning)
+            if (device.IsRunning || device2.IsRunning)
             {
                 device.Stop();
+                device2.Stop();
             }
 
             DialogResult dialog = MessageBox.Show("Opravdu chcete ukončit program?", "Ukončení aplikace", MessageBoxButtons.YesNo);
@@ -263,7 +313,11 @@ namespace FaceToWork
 		{
             try
             {
-                IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithStreamAsync(stream,true, true, recognitionModel: Recognition_model);
+                //string url = "https://raw.githubusercontent.com/lexa105/Azure-Cup-FaceToWork/main/obrazky/billgates.jpg";
+                //IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithUrlAsync(url, true, true, recognitionModel: Recognition_model);
+                // TEST URL - pouzivano pri testovani...
+
+                IList<DetectedFace> detectedFaces = await faceClient.Face.DetectWithStreamAsync(stream, true, true, recognitionModel: Recognition_model);
                 Console.WriteLine($"There are {detectedFaces.Count} faces in the webcam");
                 return detectedFaces.ToList();
             }
@@ -298,12 +352,13 @@ namespace FaceToWork
 		{
             try
 			{
+                await Task.Delay(1000);
                 await faceClient.PersonGroup.TrainAsync(_groupId);
 
                 
                 while (true)
 				{
-                    await Task.Delay(1000);
+                    await Task.Delay(5000);
                     var trainingStatus = await faceClient.PersonGroup.GetTrainingStatusAsync(_groupId);
 
                     if (trainingStatus.Status == TrainingStatusType.Succeeded)
@@ -322,7 +377,9 @@ namespace FaceToWork
 
 		private async void btnIdentify_Click(object sender, EventArgs e) //Identifikace obrazku pomoci tlacitka -- tato funkce bude pouzita automaticky pomoc Oflline detekovani.
 		{
-            /*try
+            
+            
+            try
 			{
                 if (device.IsRunning == false)// pokud kamera nema vstup - error
                 {
@@ -330,7 +387,7 @@ namespace FaceToWork
                     return;
                 }
 
-                List<Guid>sourceFaceIdsCamera = new List<Guid>();
+                IList<Guid>sourceFaceIdsCamera = new List<Guid>();
                 jpegparams = videoframe.ToJpegData(60);// snímá uloží jpeg data do memory 
                 Stream m1 = new MemoryStream(jpegparams);//preměna do streamu
                 IList<DetectedFace> detectedFaces = await UploadAndDetect(m1);// send stream
@@ -347,22 +404,23 @@ namespace FaceToWork
                     
 				}
 
-                _groupId = txtGroupName.Text.ToLower().Replace(" ", "");
-              
                 var identifyResults = await faceClient.Face.IdentifyAsync(sourceFaceIdsCamera, _groupId);
-                
                 foreach (var identifyResult in identifyResults)
 				{
                     if (identifyResult.Candidates.Count != 0)
 					{
                         var candidateId = identifyResult.Candidates[0].PersonId;
                         Person person = await faceClient.PersonGroupPerson.GetAsync(_groupId, candidateId);
-                        idList.Items.Add(person.Name);
+                        idList.Items.Add($"{DateTime.Now.Date.ToString("dd.MM.yyyy")} {person.Name} přišel v {DateTime.Now.ToString("HH:mm:ss")}");
                     }
                     else
-					{
-                        idList.Items.Add("Unknown person");
-					}
+                    {
+                        foreach (var detectedFace in detectedFaces)
+						{
+                            idList.Items.Add("Unknown person");
+                        }
+                        
+                    }
                     
 				}
                 MessageBox.Show("Identification successfully completed.");
@@ -371,9 +429,11 @@ namespace FaceToWork
 			{
                 MessageBox.Show(ex.Message);
 			}
-            */
 		}
 
-		
+		private void fill_Click(object sender, EventArgs e)
+		{
+            
+        }
 	}	
 }
