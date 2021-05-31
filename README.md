@@ -1,4 +1,4 @@
-#GFPlegendy - FaceToWork
+# GFPlegendy - FaceToWork
 
 
 Oficiální GitHub FaceToWork projektu, na účast soutěže AzureCup 2021.
