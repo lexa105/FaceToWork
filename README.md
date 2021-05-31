@@ -5,9 +5,9 @@ Oficiální GitHub FaceToWork projektu, na účast soutěže AzureCup 2021.
 Instruktáž k použití aplikace FaceToWork od týmu GFPlegendy.
 
 # Instalace
-```bash
-pip install foobar
-```
+
+Instalace Zip file
+export zip file 
 
 # Packages
 Projekt využívá balíčky 
