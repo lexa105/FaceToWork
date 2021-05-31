@@ -1,5 +1,6 @@
 #GFPlegendy - FaceToWork
 
+
 Oficiální GitHub FaceToWork projektu, na účast soutěže AzureCup 2021.
 Instruktáž k použití aplikace FaceToWork od týmu GFPlegendy.
 
@@ -22,6 +23,7 @@ Projekt běží na .NET Frameworku 4.8
 Demo/celá aplikace FaceToWork v0.1
 
 Detekce a identifikace obličejů zaměstnanců pomocí kognitivních služeb Azure FaceAPI. Následný zápis do docházky v podobě SQL databáze.
+Ke správnému fungování bude potřeba poslat ip adresu, abychom vás napojili do SQL serveru.
 Hlavní cíl programu je usnadnění záznamu zaměstnanců při příchodu do práce, kontrola proticovidových opatření (nošení respirátoru), při neidentifikování osoby zařadit do nevítaných osob.
 
 
@@ -33,4 +35,3 @@ Hlavní cíl programu je usnadnění záznamu zaměstnanců při příchodu do p
 ## Licence a copyright
 
 © Tuan Pham Van, Jan Kupka, Ondřej Šponer
-
