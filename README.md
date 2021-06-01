@@ -55,7 +55,7 @@ V Forms1.cs na začátku, si můžete nastavit Koncový bod a klíč od Azure Fa
 
 4. Až budete hotovi stačí pouze zmáčknout tlačítko **Train**. A aplikace bude připravena identifikovat lidi.
 
-5. Vraťte se zpátky **Domů**, zde si musíte vybrat dostupná zařízení pro Vchod a Východ (kamerové výstupy), dáte Zapnout Kamery, při spuštění se vám obrazovky zapnou a aplikace bude připravena identifikovat a určovat tváře.
+5. Vraťte se zpátky **Domů**, zde si musíte vybrat dostupná zařízení pro Vchod a Východ (kamerové výstupy), dáte Zapnout Kamery, při spuštění se vám obrazovky zapnou a aplikace bude připravena identifikovat a určovat tváře. (Zatím je možné pouze identifikovat přes tlačítko **Identify**, která provede funkci identifikace, eventuálně by se mohla zařadit automaticky kdykoliv kdy rozpozná obličej)
 
 
 
