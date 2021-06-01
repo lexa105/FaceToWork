@@ -45,7 +45,7 @@ Na začátku si můžete nastavit Koncový bod a klíč od Azure Face API :
 ```
 1. Po zapnutí vám naběhne hlavní menu, se kterým si přejdete do **Docházky** 
 
-![Menu](https://raw.githubusercontent.com/lexa105/FaceToWork-ImageSamples/main/obrazky/Doch%C3%A1zka.png)
+![Menu](https://raw.githubusercontent.com/lexa105/FaceToWork-ImageSamples/main/obrazky/Sequence%2001_3.gif)
 
 2. V docházce dáte tlačítko **Create Person Group** kde zadáte vámi volitelný groupID a Group Name ()
 
