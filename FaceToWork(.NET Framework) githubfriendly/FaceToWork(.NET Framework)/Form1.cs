@@ -283,6 +283,8 @@ namespace FaceToWork
 			{
                 MessageBox.Show(apiex.Message);
 			}
+			
+	    System.Diagnostics.Process.Start("http://google.com/");
        
         }
 
