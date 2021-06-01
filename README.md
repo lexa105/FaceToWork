@@ -33,7 +33,7 @@ Zatím lze detekce a identifikace pouze v jedné Person Group(která zatím v kl
 
 # Použití
 
-Na začátku si můžete nastavit Koncový bod a klíč od Azure Face API :
+V Forms1.cs na začátku, si můžete nastavit Koncový bod a klíč od Azure Face API :
 ```csharp
  //variables for Azure Face API
         private static string subscriptionKey = "<subricption key>";
