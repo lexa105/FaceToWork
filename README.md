@@ -51,7 +51,7 @@ V Forms1.cs na začátku, si můžete nastavit Koncový bod a klíč od Azure Fa
 
 3. Výborně jste vytvořili Person Group. Teď je potřeba zvolit Person Group v ComboBox (při zmáčknutí se načtou skupiny) a můžete začít přidávat Osoby a tváře Při výběru souborů pro osoby vybírejte pouze ty kde bude osoba sama na fotce a je dobře rozeznatelná. Výbrat můžete více foutek najednou program se s tím vypořádá :)
 
-4.Až budete hotovi stačí pouze zmáčknout tlačítko **Train**. A aplikace bude připravena identifikovat lidi.
+4. Až budete hotovi stačí pouze zmáčknout tlačítko **Train**. A aplikace bude připravena identifikovat lidi.
 
 5. Vraťte se zpátky **Domů**, zde si musíte vybrat dostupná zařízení pro Vchod a Východ (kamerové výstupy), dáte Zapnout Kamery, při spuštění se vám obrazovky zapnou a aplikace bude připravena identifikovat a určovat tváře.
 
