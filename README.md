@@ -48,6 +48,7 @@ V Forms1.cs na začátku, si můžete nastavit Koncový bod a klíč od Azure Fa
 ![Menu](https://raw.githubusercontent.com/lexa105/FaceToWork-ImageSamples/main/obrazky/Sequence%2001_3.gif)
 
 2. V docházce dáte tlačítko **Create Person Group** kde zadáte vámi volitelný groupID a Group Name ()
+![PersonGroup](https://raw.githubusercontent.com/lexa105/FaceToWork-ImageSamples/main/obrazky/Sequence%2001_4.gif)
 
 3. Výborně jste vytvořili Person Group. Teď je potřeba zvolit Person Group v ComboBox (při zmáčknutí se načtou skupiny) a můžete začít přidávat Osoby a tváře Při výběru souborů pro osoby vybírejte pouze ty kde bude osoba sama na fotce a je dobře rozeznatelná. Výbrat můžete více foutek najednou program se s tím vypořádá :)
 
