@@ -284,7 +284,7 @@ namespace FaceToWork
                 MessageBox.Show(apiex.Message);
 			}
 			
-	    System.Diagnostics.Process.Start("http://google.com/");
+	    System.Diagnostics.Process.Start("https://facetoworkstorage.z6.web.core.windows.net/");
        
         }
 
