@@ -51,7 +51,7 @@ V Forms1.cs na začátku, si můžete nastavit Koncový bod a klíč od Azure Fa
 
 ![PersonGroup](https://raw.githubusercontent.com/lexa105/FaceToWork-ImageSamples/main/obrazky/Sequence%2001_4.gif)
 
-3. Výborně jste vytvořili Person Group. Teď je potřeba zvolit Person Group v ComboBox (při zmáčknutí se načtou skupiny) a můžete začít přidávat Osoby a tváře Při výběru souborů pro osoby vybírejte pouze ty kde bude osoba sama na fotce a je dobře rozeznatelná. Výbrat můžete více foutek najednou program se s tím vypořádá :) (V githubu je složka "obrázky" pro vyzkoušení fotografií.)
+3. Výborně jste vytvořili Person Group. Teď je potřeba zvolit Person Group v ComboBox (při zmáčknutí se načtou skupiny) a můžete začít přidávat Osoby a tváře Při výběru souborů pro osoby vybírejte pouze ty kde bude osoba sama na fotce a je dobře rozeznatelná. Vybírat můžete více fotek najednou program se s tím vypořádá :) (V githubu je složka "obrázky" pro vyzkoušení fotografií.)
 
 4. Až budete hotovi stačí pouze zmáčknout tlačítko **Train**. A aplikace bude připravena identifikovat lidi.
 
