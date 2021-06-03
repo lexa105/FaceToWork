@@ -119,7 +119,22 @@ namespace FaceToWork
 
 		private void CamIN_Click(object sender, EventArgs e)
 		{
+			DateTime time = DateTime.Now;
+			string format = "HH:mm:ss";
+			string dateIn = time.ToString(format);
+			string personName = "Elon";
+			string groupId = "lidi";
+			DataSet1TableAdapters.RecordTBLTableAdapter recordTBL = new DataSet1TableAdapters.RecordTBLTableAdapter();
 
+			Console.WriteLine(dateIn);
+			recordTBL.AddRecord(dateTimePicker1.Text, personName, groupId, dateIn);
+
+		}
+
+		public void IN(string dateIn, string personName, string groupId)
+		{
+			DataSet1TableAdapters.RecordTBLTableAdapter recordTBL = new DataSet1TableAdapters.RecordTBLTableAdapter();
+			recordTBL.AddRecord(dateTimePicker1.Text, personName, groupId, dateIn);
 		}
 	}
 }
