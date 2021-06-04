@@ -67,7 +67,7 @@ namespace FaceToWork
 					
 					Console.WriteLine($"Add face to the person ({Name_txtBox.Text}).");
 					PersistedFace face = await faceClient.PersonGroupPerson.AddFaceFromStreamAsync(_groupId, person.PersonId, s);
-					await Task.Delay(100);
+					
 
 				}
 
@@ -81,10 +81,7 @@ namespace FaceToWork
 
 
 		}
-		
 
-		
-		
 		/*private void Add_Click(object sender, EventArgs e)
 		{
 			count++;
