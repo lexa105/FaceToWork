@@ -304,7 +304,7 @@ namespace FaceToWork
 			// 
 			this.label5.AutoSize = true;
 			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.label5.Location = new System.Drawing.Point(963, 486);
+			this.label5.Location = new System.Drawing.Point(820, 518);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(197, 13);
 			this.label5.TabIndex = 17;
@@ -313,9 +313,9 @@ namespace FaceToWork
 			// idList
 			// 
 			this.idList.FormattingEnabled = true;
-			this.idList.Location = new System.Drawing.Point(966, 502);
+			this.idList.Location = new System.Drawing.Point(823, 534);
 			this.idList.Name = "idList";
-			this.idList.Size = new System.Drawing.Size(269, 95);
+			this.idList.Size = new System.Drawing.Size(335, 121);
 			this.idList.TabIndex = 16;
 			// 
 			// cboCameraDevices2

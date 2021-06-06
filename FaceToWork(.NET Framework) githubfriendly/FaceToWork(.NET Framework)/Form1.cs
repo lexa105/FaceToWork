@@ -529,7 +529,8 @@ namespace FaceToWork
                     }
                     else
                     {
-                        idList.Items.Add("Unknown person odešel v {time}");
+                        var time = DateTime.Now.ToString("HH:mm:ss");
+                        idList.Items.Add($"{DateTime.Now.Date.ToString("dd.MM.yyyy")} Unknown person odešel v {time}");
                     }
                 }
             }
