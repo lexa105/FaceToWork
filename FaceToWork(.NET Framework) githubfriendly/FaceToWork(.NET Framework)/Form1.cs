@@ -39,6 +39,7 @@ using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 
 namespace FaceToWork
 {
+
     public partial class Form1 : Form
     {
 
@@ -67,11 +68,14 @@ namespace FaceToWork
 
 
         
-
+	
 
         //variables for Azure Face API
-        private static string subscriptionKey = "1bb9e797051348698dc5c58a509646c8";
-        private static string endpoint = "https://facetowork-endpoint.cognitiveservices.azure.com";
+	private static string subscriptionKey;
+ 	private static string endpoint;
+        subscriptionKey = Environment.GetEnvironmentVariable("AZURE_FACE_SUBSCRIPTION_KEY");
+        endpoint = Environment.GetEnvironmentVariable("AZURE_FACE_ENDPOINT");
+
         
         public static IFaceClient faceClient = new FaceClient(
             new ApiKeyServiceClientCredentials(subscriptionKey),
